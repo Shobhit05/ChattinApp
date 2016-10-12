@@ -7,7 +7,7 @@ from chatfns import *
 
 s = socket(AF_INET,SOCK_STREAM)
 host = '127.0.1.1'
-port = 1234 # any por u can give here i have given just a random one
+port = 1234 # any port u can give here i have given just a random one
 conn = ''
 s.bind((host, port))
 
@@ -57,7 +57,7 @@ chatspace.insert(END, "Waiting to connect\n")
 chatspace.config(state=DISABLED)
 
 
-scrollbar = Scrollbar(window, command=chatspace.yview, cursor="heart")
+scrollbar = Scrollbar(window, command=chatspace.yview, cursor="fleur")
 chatspace['yscrollcommand'] = scrollbar.set
 
 
