@@ -8,7 +8,7 @@ from Tkinter import *
 
 
 host = "127.0.1.1"
-port = 8011
+port = 1234 #any port u can give here 
 s = socket(AF_INET, SOCK_STREAM)
 
 
@@ -56,7 +56,7 @@ chatspace.insert(END, "Connecting to your partner..\n")
 chatspace.config(state=DISABLED)
 
 
-scrollbar = Scrollbar(window, command=chatspace.yview, cursor="heart")
+scrollbar = Scrollbar(window, command=chatspace.yview, cursor="fleur")
 chatspace['yscrollcommand'] = scrollbar.set
 
 
