@@ -1,5 +1,5 @@
 import thread
-from chatfns import *
+from updating import *
 from Tkinter import *
 
 
