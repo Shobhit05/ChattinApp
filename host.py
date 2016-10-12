@@ -1,7 +1,7 @@
 import thread
 from updating import *
 from Tkinter import *
-
+import socket
 
 # CONNECTING WITH THE SERVER #
 
@@ -9,7 +9,7 @@ from Tkinter import *
 
 host = "127.0.1.1"
 port = 1234 #any port u can give here 
-s = socket(AF_INET, SOCK_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
 
