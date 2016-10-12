@@ -5,7 +5,7 @@ import socket
 
 #CONNECTION 
 
-s = socket(AF_INET,SOCK_STREAM)
+s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 host = '127.0.1.1'
 port = 1234 # any port u can give here i have given just a random one
 conn = ''
