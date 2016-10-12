@@ -7,7 +7,7 @@ from chatfns import *
 
 s = socket(AF_INET,SOCK_STREAM)
 host = '127.0.1.1'
-port = 8011
+port = 1234 # any por u can give here i have given just a random one
 conn = ''
 s.bind((host, port))
 
@@ -53,7 +53,7 @@ window.resizable(width=FALSE, height=FALSE)
 
 
 chatspace = Text(window, bd=0, bg="grey", height="8", width="50", font="Arial",)
-chatspace.insert(END, "Waiting to connect..\n")
+chatspace.insert(END, "Waiting to connect\n")
 chatspace.config(state=DISABLED)
 
 
