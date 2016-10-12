@@ -1,148 +1,112 @@
-# creating a noraml chat window #
-
-
-
-import socket
 import thread
+from chatfns import *
 from Tkinter import *
-window=Tk()
-window.title("Chat window")
-window.geometry("500x500")
-window.resizable(width=False,height=True)
 
 
-# connecting to the partner #
-s=socket.socket(socket.AF_INET ,socket.SOCK_STREAM)
-host=socket.gethostbyname(socket.gethostname())
-port=1234
-address=(host,port)
-s.bind(address)
-conn=''
-data=''
+# CONNECTING WITH THE SERVER #
+
+
+
+host = "127.0.1.1"
+port = 8011
+s = socket(AF_INET, SOCK_STREAM)
 
 
 
 
 
+#- MOUSE EVENTS 
 
-#MOUSE EVENTS #
-
-
-def Clickaction():
+def ClickAction():
     
-    entrytext=entrybox.get("0.0",END)
-       
+    EntryText = entrybox.get("0.0",END)
+    myupdate(chatspace, EntryText)
+
+   
     chatspace.yview(END)
- 
-    chatspace.config(state=DISABLED)
+
     
     entrybox.delete("0.0",END)
+            
     
-    
-    s.sendall(entrytext)
+    s.sendall(EntryText)
+# KEY BOARD ACTIONS #
 
 
 
-    
-
-
-
-
-# keyboard events #
-
-def Pressaction(event):
-    chatspace.config(state=NORMAL)
-    Clickaction()
-def Disablentry(event):
-    chatspace.config(state=DISABLED)
+def PressAction(event):
+	entrybox.config(state=NORMAL)
+	ClickAction()
+def DisableEntry(event):
+	entrybox.config(state=DISABLED)
     
 
+# CREATING CHAT TKINTER 
 
 
 
+window = Tk()
+window.title('Lets Chat')
+window.geometry("500x500")
+window.resizable(width=FALSE, height=FALSE)
 
 
-
-
-
-
-
-
-
-
-
-
-# creating a space for text message to be displayed #
-
-chatspace=Text(window, bd=0,bg="skyblue",height="8",width="500",font="Arial")
-chatspace.insert(END,"Waiting for the partner to connect \n \n")
+chatspace = Text(window, bd=0, bg="grey", height="8", width="50", font="Arial",)
+chatspace.insert(END, "Connecting to your partner..\n")
 chatspace.config(state=DISABLED)
 
 
-# creating a scrollbar #
-
-scrollbar=Scrollbar(window,command=chatspace.yview,cursor="heart")
+scrollbar = Scrollbar(window, command=chatspace.yview, cursor="heart")
 chatspace['yscrollcommand'] = scrollbar.set
 
-# Create the entry box for the message typing  #
 
-entrybox=Text(window,bd=0,bg="yellow" ,width="29" ,height="5" ,font="Arial")
-entrybox.bind("<Return>",Disablentry)
-entrybox.bind("<KeyRelease-Return>",Pressaction)
-
-
-# create the send button #
-sendbutton=Button(window, font=30, text="Send", width="12", height=5,bd=0, bg="#FFBF00", activebackground="#FACC2E",
-
-                 command=Clickaction)
+SendButton = Button(window, font=30, text="Send", width="12", height=5,
+                    bd=0, bg="yellow", activebackground="red",
+                    command=ClickAction)
 
 
+entrybox = Text(window, bd=0, bg="grey",width="29", height="5", font="Arial")
+entrybox.bind("<Return>", DisableEntry)
+entrybox.bind("<KeyRelease-Return>", PressAction)
 
 
-#placing the components in the chat window #
-
-chatspace.place(x=6,y=6,height=386,width=488) # x= shift from x and y axis #
-scrollbar.place(x=480,y=6,height=386)
-entrybox.place(x=150,y=401,height=120,width=340)
-sendbutton.place(x=4,y=401,height=80,width=140)
-
-# gettin connected #
+scrollbar.place(x=476,y=6, height=386)
+chatspace.place(x=6,y=6, height=386, width=470)
+entrybox.place(x=128, y=401, height=90, width=365)
+SendButton.place(x=6, y=401, height=90)
 
 
-def GetConnected():
-    s.listen(1)
-    global conn,LoadConnectionInfo
-    conn, addr = s.accept()
-    LoadConnectionInfo(chatspace, 'Connected with: ' + str(addr))   
+
+
+
+
+# GETTING CONNECTION AND DATA 
+
+def ReceiveData():
+    try:
+        s.connect((host, port))
+        connectioninfo(chatspace, '[ Succesfully connected ]\n---------------------------------------------------------------')
+    except:
+        connectioninfo(chatspace, '[ Unable to connect ]')
+        return
+    
     while 1:
         try:
-            
-            data = conn.recv(1024)
-            
-            LoadOtherEntry(chatspace, data)
-            if window.focus_get() == None:
-                FlashMyWindow("Chat window")
-                
+            data = s.recv(1024)
         except:
-            LoadConnectionInfo(chatspace, '\n [ Your partner has disconnected ]')
-
-            GetConnected()
-
-    conn.close()
+            connectioninfo(chatspace, '\n partner  disconnected  \n')
+            break
+        if data != '':
+            update2(chatspace, data)
+            
+                
+                
+                
+        else:
+            connectioninfo(chatspace, '\n  partner disconnected  \n')
+            break
     
-thread.start_new_thread(GetConnected,())
 
-
-
-
-
-
+thread.start_new_thread(ReceiveData,())
 
 window.mainloop()
-
-
-
-
-
-
-
